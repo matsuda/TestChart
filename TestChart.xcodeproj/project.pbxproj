@@ -12,6 +12,8 @@
 		962568391F3AD83100CB6BFE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 962568371F3AD83100CB6BFE /* Main.storyboard */; };
 		9625683B1F3AD83100CB6BFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9625683A1F3AD83100CB6BFE /* Assets.xcassets */; };
 		9625683E1F3AD83100CB6BFE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9625683C1F3AD83100CB6BFE /* LaunchScreen.storyboard */; };
+		962568461F3AD8B600CB6BFE /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 962568451F3AD8B600CB6BFE /* Cartfile */; };
+		962568491F3AD9C700CB6BFE /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962568481F3AD9C700CB6BFE /* Charts.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		9625683A1F3AD83100CB6BFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9625683D1F3AD83100CB6BFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9625683F1F3AD83100CB6BFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		962568451F3AD8B600CB6BFE /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		962568481F3AD9C700CB6BFE /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Carthage/Build/iOS/Charts.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				962568491F3AD9C700CB6BFE /* Charts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,8 +43,10 @@
 		962568271F3AD83100CB6BFE = {
 			isa = PBXGroup;
 			children = (
+				962568451F3AD8B600CB6BFE /* Cartfile */,
 				962568321F3AD83100CB6BFE /* TestChart */,
 				962568311F3AD83100CB6BFE /* Products */,
+				962568471F3AD9C700CB6BFE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +71,14 @@
 			path = TestChart;
 			sourceTree = "<group>";
 		};
+		962568471F3AD9C700CB6BFE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				962568481F3AD9C700CB6BFE /* Charts.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,6 +89,7 @@
 				9625682C1F3AD83100CB6BFE /* Sources */,
 				9625682D1F3AD83100CB6BFE /* Frameworks */,
 				9625682E1F3AD83100CB6BFE /* Resources */,
+				9625684A1F3AD9D400CB6BFE /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -124,11 +140,30 @@
 			files = (
 				9625683E1F3AD83100CB6BFE /* LaunchScreen.storyboard in Resources */,
 				9625683B1F3AD83100CB6BFE /* Assets.xcassets in Resources */,
+				962568461F3AD8B600CB6BFE /* Cartfile in Resources */,
 				962568391F3AD83100CB6BFE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9625684A1F3AD9D400CB6BFE /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Charts.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9625682C1F3AD83100CB6BFE /* Sources */ = {
@@ -259,7 +294,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = TestChart/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.matsuda.TestChart;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -271,7 +311,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = TestChart/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.matsuda.TestChart;
 				PRODUCT_NAME = "$(TARGET_NAME)";
