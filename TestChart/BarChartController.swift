@@ -13,10 +13,17 @@ final class BarChartController: UIViewController {
 
     @IBOutlet weak var chartView: BarChartView!
 
+    struct PlotData {
+        let date: TimeInterval
+        let value: Double
+    }
+    var plots: [PlotData] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        preparePlotData()
         prepareChart()
         setChartData()
     }
@@ -38,6 +45,15 @@ final class BarChartController: UIViewController {
 }
 
 extension BarChartController {
+    func preparePlotData() {
+        plots = [
+            PlotData(date: Date(timeIntervalSinceNow: -60*60*24*4).timeIntervalSince1970, value: 100),
+            PlotData(date: Date(timeIntervalSinceNow: -60*60*24*3).timeIntervalSince1970, value: 50),
+            PlotData(date: Date(timeIntervalSinceNow: -60*60*24*2).timeIntervalSince1970, value: 20),
+            PlotData(date: Date(timeIntervalSinceNow: -60*60*24*1).timeIntervalSince1970, value: 80),
+        ]
+    }
+
     func prepareChart() {
         chartView.extraTopOffset = 30
         chartView.chartDescription?.enabled = false
@@ -48,6 +64,7 @@ extension BarChartController {
         xAxis.labelPosition = .bottom
         xAxis.drawGridLinesEnabled = false
         xAxis.labelCount = 4
+        xAxis.valueFormatter = DateAxisValueFormatter(chart: chartView, dates: plots.map { $0.date })
 
         let leftAxis = chartView.leftAxis
         leftAxis.drawGridLinesEnabled = false
@@ -64,15 +81,39 @@ extension BarChartController {
     }
 
     func setChartData() {
-        let entries: [BarChartDataEntry] = [
-            BarChartDataEntry(x: 1, y: 100),
-            BarChartDataEntry(x: 2, y: 50),
-            BarChartDataEntry(x: 3, y: 20),
-            BarChartDataEntry(x: 4, y: 80),
-        ]
+        let entries: [BarChartDataEntry] = plots.enumerated().map { (i, data) -> BarChartDataEntry in
+            BarChartDataEntry(x: Double(i), y: data.value)
+        }
         let dataSet = BarChartDataSet(values: entries, label: "test")
         let data = BarChartData(dataSet: dataSet)
         data.setValueFont(UIFont.systemFont(ofSize: 12))
         chartView.data = data
+    }
+}
+
+//extension BarChartController: IAxisValueFormatter {
+//    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+//        return "x = \(value)"
+//    }
+//}
+
+final class DateAxisValueFormatter: NSObject, IAxisValueFormatter {
+    private weak var _chart: BarLineChartViewBase!
+    private let dates: [TimeInterval]
+    private let formatter: DateFormatter
+
+    init(chart: BarLineChartViewBase, dates: [TimeInterval]) {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "MM/dd\nyyyy\n23\u{2103}"
+        self.formatter = formatter
+        self.dates = dates
+        _chart = chart
+    }
+
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        let idx = Int(value)
+        let date = Date(timeIntervalSince1970: dates[idx])
+        return formatter.string(from: date)
     }
 }
