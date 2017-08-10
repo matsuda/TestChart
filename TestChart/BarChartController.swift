@@ -49,7 +49,7 @@ extension BarChartController {
         plots = [
             PlotData(date: Date(timeIntervalSinceNow: -60*60*24*4).timeIntervalSince1970, value: 100),
             PlotData(date: Date(timeIntervalSinceNow: -60*60*24*3).timeIntervalSince1970, value: 50),
-            PlotData(date: Date(timeIntervalSinceNow: -60*60*24*2).timeIntervalSince1970, value: 20),
+            PlotData(date: Date(timeIntervalSinceNow: -60*60*24*2).timeIntervalSince1970, value: 10),
             PlotData(date: Date(timeIntervalSinceNow: -60*60*24*1).timeIntervalSince1970, value: 80),
         ]
     }
@@ -78,13 +78,23 @@ extension BarChartController {
 
         let legend = chartView.legend
         legend.enabled = false
+
+        let average: Double = (plots.reduce(0) { (result, data) -> Double in
+            result + data.value
+        }) / Double(plots.count)
+        let averageLine = ChartLimitLine(limit: average, label: "Ave.")
+        averageLine.lineColor = NSUIColor.gray
+        averageLine.lineDashLengths = [3]
+        averageLine.lineWidth = 2
+        averageLine.labelPosition = .leftTop
+        leftAxis.addLimitLine(averageLine)
     }
 
     func setChartData() {
         let entries: [BarChartDataEntry] = plots.enumerated().map { (i, data) -> BarChartDataEntry in
             BarChartDataEntry(x: Double(i), y: data.value)
         }
-        let dataSet = BarChartDataSet(values: entries, label: "test")
+        let dataSet = BarChartDataSet(values: entries, label: nil)
         let data = BarChartData(dataSet: dataSet)
         data.setValueFont(UIFont.systemFont(ofSize: 12))
         chartView.data = data
